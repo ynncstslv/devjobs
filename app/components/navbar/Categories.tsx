@@ -34,8 +34,6 @@ import { FaJava } from 'react-icons/fa';
 import CategoryBox from '../CategoryBox';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-interface CategoriesProps {}
-
 export const categories = [
 	{
 		label: 'HTML5',
@@ -147,7 +145,7 @@ export const categories = [
 	},
 ];
 
-const Categories: FC<CategoriesProps> = ({}) => {
+const Categories = () => {
 	const params = useSearchParams();
 	const category = params?.get('category');
 	const pathname = usePathname();

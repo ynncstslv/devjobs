@@ -52,12 +52,14 @@ model Listing {
   imageSrc      String
   createdAt     DateTime @default(now())
   category      String
-  roomCount     Int
-  bathroomCount Int
-  guestCount    Int
+  employeeCount Int
+  xpCount       Int
   locationValue String
+  visaValue     String
+  xpLevelValue  String
+  jobTypeValue  String
   userId        String   @db.ObjectId
-  price         Int
+  salary        Int
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

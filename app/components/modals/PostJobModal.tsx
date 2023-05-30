@@ -9,6 +9,11 @@ import CategoryInput from '../inputs/CategoryInput';
 import { FieldValues, useForm } from 'react-hook-form';
 import CountrySelect from '../inputs/CountrySelect';
 import dynamic from 'next/dynamic';
+import Counter from '../inputs/Counter';
+import CounterTimes from '../inputs/CounterTimes';
+import ExperienceLevel from '../inputs/ExperienceLevel';
+import VisaSelect from '../inputs/VisaSelect';
+import JobType from '../inputs/JobType';
 
 interface PostJobModalProps {}
 
@@ -38,6 +43,11 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 			category: '',
 			location: null,
 			imageSrc: '',
+			xpCount: 1,
+			employeeCount: 5,
+			visaValue: null,
+			xpLevelValue: null,
+			jobTypeValue: null,
 			salary: 1,
 			title: '',
 			description: '',
@@ -46,6 +56,11 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 
 	const category = watch('category');
 	const location = watch('location');
+	const xpCount = watch('xpCount');
+	const employeeCount = watch('employeeCount');
+	const jobTypeValue = watch('jobTypeValue');
+	const xpLevelValue = watch('xpLevelValue');
+	const visaValue = watch('visaValue');
 
 	const Map = useMemo(
 		() => dynamic(() => import('../Map'), { ssr: false }),
@@ -117,6 +132,52 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 					onChange={(value) => setCustomValue('location', value)}
 				/>
 				<Map center={location?.latlng} />
+			</div>
+		);
+	}
+
+	if (step === STEPS.INFO) {
+		bodyContent = (
+			<div className="flex flex-col gap-8 max-h-[70vh] overflow-y-auto">
+				<Heading
+					title="What is the job?"
+					subtitle="Share some information about your company and the job"
+				/>
+				<CounterTimes
+					title="Company Size"
+					subtitle="How many employees your company have?"
+					value={employeeCount}
+					onChange={(value) => setCustomValue('employeeCount', value)}
+				/>
+				<hr />
+				<Counter
+					title="Experience"
+					subtitle="How many years of experience are you looking for?"
+					value={xpCount}
+					onChange={(value) => setCustomValue('xpCount', value)}
+				/>
+				<hr />
+				<JobType
+					title="Job Type"
+					subtitle="What is the type of the job?"
+					value={jobTypeValue}
+					onChange={(value) => setCustomValue('jobTypeValue', value)}
+				/>
+				<hr />
+				<ExperienceLevel
+					title="Experience Level"
+					subtitle="What is the experience level you are looking for?"
+					value={xpLevelValue}
+					onChange={(value) => setCustomValue('xpLevelValue', value)}
+				/>
+				<hr />
+				<VisaSelect
+					title="Visa Sponsorship"
+					subtitle="Does it offer sponsorship?"
+					value={visaValue}
+					onChange={(value) => setCustomValue('visaValue', value)}
+				/>
+				<hr />
 			</div>
 		);
 	}
