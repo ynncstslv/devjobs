@@ -22,11 +22,19 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 		setIsOpen((value) => !value);
 	}, []);
 
+	const onJobs = useCallback(() => {
+		if (!currentUser) {
+			return loginModal.onOpen();
+		}
+
+		// open post job modal
+	}, [currentUser, loginModal]);
+
 	return (
 		<div className="relative">
 			<div className="flex flex-row items-center gap-3">
 				<div
-					onClick={() => {}}
+					onClick={onJobs}
 					className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
 				>
 					Post a job
