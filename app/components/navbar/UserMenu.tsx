@@ -8,6 +8,7 @@ import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
+import usePostJobModal from '@/app/hooks/usePostJobModal';
 
 interface UserMenuProps {
 	currentUser?: SafeUser | null;
@@ -16,6 +17,8 @@ interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 	const registerModal = useRegisterModal();
 	const loginModal = useLoginModal();
+	const postJobModal = usePostJobModal();
+
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleOpen = useCallback(() => {
@@ -27,8 +30,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 			return loginModal.onOpen();
 		}
 
-		// open post job modal
-	}, [currentUser, loginModal]);
+		postJobModal.onOpen();
+	}, [currentUser, loginModal, postJobModal]);
 
 	return (
 		<div className="relative">
@@ -57,7 +60,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 								<MenuItem onClick={() => {}} label="My Account" />
 								<MenuItem onClick={() => {}} label="My Favorites" />
 								<MenuItem onClick={() => {}} label="My Jobs" />
-								<MenuItem onClick={() => {}} label="Post a Job" />
+								<MenuItem onClick={postJobModal.onOpen} label="Post a Job" />
 								<hr />
 								<MenuItem onClick={() => signOut()} label="Logout" />
 							</>

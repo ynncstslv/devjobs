@@ -6,6 +6,7 @@ import { Nunito } from 'next/font/google';
 import ToastProvider from './providers/ToasterProvider';
 import LoginModal from './components/modals/LoginModal';
 import getCurrentUser from './actions/getCurrentUser';
+import PostJobModal from './components/modals/PostJobModal';
 
 const nunito = Nunito({ subsets: ['latin'] });
 
@@ -21,6 +22,7 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }) {
 	const currentUser = await getCurrentUser();
+
 	return (
 		<html lang="en">
 			<body className={nunito.className}>
@@ -28,6 +30,7 @@ export default async function RootLayout({
 					<ToastProvider />
 					<LoginModal />
 					<RegisterModal />
+					<PostJobModal />
 					<Navbar currentUser={currentUser} />
 				</ClientOnly>
 				{children}
