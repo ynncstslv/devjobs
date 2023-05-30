@@ -7,6 +7,8 @@ import Heading from '../Heading';
 import { categories } from '../navbar/Categories';
 import CategoryInput from '../inputs/CategoryInput';
 import { FieldValues, useForm } from 'react-hook-form';
+import CountrySelect from '../inputs/CountrySelect';
+import dynamic from 'next/dynamic';
 
 interface PostJobModalProps {}
 
@@ -43,6 +45,12 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 	});
 
 	const category = watch('category');
+	const location = watch('location');
+
+	const Map = useMemo(
+		() => dynamic(() => import('../Map'), { ssr: false }),
+		[location]
+	);
 
 	const setCustomValue = (id: string, value: any) => {
 		setValue(id, value, {
@@ -97,6 +105,22 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 		</div>
 	);
 
+	if (step === STEPS.LOCATION) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="Where is the job located?"
+					subtitle="Help candidates find you!"
+				/>
+				<CountrySelect
+					value={location}
+					onChange={(value) => setCustomValue('location', value)}
+				/>
+				<Map center={location?.latlng} />
+			</div>
+		);
+	}
+
 	return (
 		<Modal
 			title="Post a Job"
@@ -105,7 +129,7 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 			secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
 			isOpen={postJobModal.isOpen}
 			onClose={postJobModal.onClose}
-			onSubmit={postJobModal.onClose}
+			onSubmit={onNext}
 			body={bodyContent}
 		/>
 	);
