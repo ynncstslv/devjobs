@@ -14,6 +14,7 @@ import CounterTimes from '../inputs/CounterTimes';
 import ExperienceLevel from '../inputs/ExperienceLevel';
 import VisaSelect from '../inputs/VisaSelect';
 import JobType from '../inputs/JobType';
+import ImageUpload from '../inputs/ImageUpload';
 
 interface PostJobModalProps {}
 
@@ -61,6 +62,7 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 	const jobTypeValue = watch('jobTypeValue');
 	const xpLevelValue = watch('xpLevelValue');
 	const visaValue = watch('visaValue');
+	const imageSrc = watch('imageSrc');
 
 	const Map = useMemo(
 		() => dynamic(() => import('../Map'), { ssr: false }),
@@ -178,6 +180,21 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 					onChange={(value) => setCustomValue('visaValue', value)}
 				/>
 				<hr />
+			</div>
+		);
+	}
+
+	if (step === STEPS.IMAGE) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="Add a banner for your company"
+					subtitle="Show your brand to the candidates!"
+				/>
+				<ImageUpload
+					value={imageSrc}
+					onChange={(value) => setCustomValue('imageSrc', value)}
+				/>
 			</div>
 		);
 	}
