@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import Heading from '../Heading';
 import { categories } from '../navbar/Categories';
 import CategoryInput from '../inputs/CategoryInput';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import CountrySelect from '../inputs/CountrySelect';
 import dynamic from 'next/dynamic';
 import Counter from '../inputs/Counter';
@@ -15,8 +15,10 @@ import ExperienceLevel from '../inputs/ExperienceLevel';
 import VisaSelect from '../inputs/VisaSelect';
 import JobType from '../inputs/JobType';
 import ImageUpload from '../inputs/ImageUpload';
-
-interface PostJobModalProps {}
+import Input from '../inputs/Input';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 enum STEPS {
 	CATEGORY = 0,
@@ -27,10 +29,12 @@ enum STEPS {
 	SALARY = 5,
 }
 
-const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
+const PostJobModal = () => {
+	const router = useRouter();
 	const postJobModal = usePostJobModal();
 
 	const [step, setStep] = useState(STEPS.CATEGORY);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const {
 		register,
@@ -83,6 +87,30 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 
 	const onNext = () => {
 		setStep((value) => value + 1);
+	};
+
+	const onSubmit: SubmitHandler<FieldValues> = (data) => {
+		if (step !== STEPS.SALARY) {
+			return onNext();
+		}
+
+		setIsLoading(true);
+
+		axios
+			.post('/api/listings', data)
+			.then(() => {
+				toast.success('Listing Created!');
+				router.refresh();
+				reset();
+				setStep(STEPS.CATEGORY);
+				postJobModal.onClose();
+			})
+			.catch(() => {
+				toast.error('Something went wrong.');
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	};
 
 	const actionLabel = useMemo(() => {
@@ -199,6 +227,55 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 		);
 	}
 
+	if (step === STEPS.DESCRIPTION) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="How would you describe the job?"
+					subtitle="Short and objective works best!"
+				/>
+				<Input
+					id="title"
+					label="Title"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+					required
+				/>
+				<hr />
+				<Input
+					id="description"
+					label="Description"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+					required
+				/>
+			</div>
+		);
+	}
+
+	if (step === STEPS.SALARY) {
+		bodyContent = (
+			<div>
+				<Heading
+					title="Salary"
+					subtitle="How much is the annual salary for this opening?"
+				/>
+				<Input
+					id="salary"
+					label="Salary"
+					formatSalary
+					type="number"
+					register={register}
+					disabled={isLoading}
+					errors={errors}
+					required
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<Modal
 			title="Post a Job"
@@ -207,7 +284,7 @@ const PostJobModal: React.FC<PostJobModalProps> = ({}) => {
 			secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
 			isOpen={postJobModal.isOpen}
 			onClose={postJobModal.onClose}
-			onSubmit={onNext}
+			onSubmit={handleSubmit(onSubmit)}
 			body={bodyContent}
 		/>
 	);
