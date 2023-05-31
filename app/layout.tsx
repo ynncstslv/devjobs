@@ -1,12 +1,16 @@
-import ClientOnly from './components/ClientOnly';
-import RegisterModal from './components/modals/RegisterModal';
-import Navbar from './components/navbar/Navbar';
-import './globals.css';
-import { Nunito } from 'next/font/google';
-import ToastProvider from './providers/ToasterProvider';
-import LoginModal from './components/modals/LoginModal';
 import getCurrentUser from './actions/getCurrentUser';
+
+import ToastProvider from './providers/ToasterProvider';
+
+import ClientOnly from './components/ClientOnly';
+import LoginModal from './components/modals/LoginModal';
+import Navbar from './components/navbar/Navbar';
 import PostJobModal from './components/modals/PostJobModal';
+import RegisterModal from './components/modals/RegisterModal';
+
+import './globals.css';
+
+import { Nunito } from 'next/font/google';
 
 const nunito = Nunito({ subsets: ['latin'] });
 
