@@ -25,6 +25,7 @@ export async function POST(request: Request) {
 		xpLevelValue,
 		jobTypeValue,
 		salary,
+		jobApply,
 	} = body;
 
 	Object.keys(body).forEach((value: any) => {
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
 			xpLevelValue: xpLevelValue.label,
 			jobTypeValue: jobTypeValue.label,
 			salary: parseInt(salary, 10),
+			jobApply,
 			userId: currentUser.id,
 		},
 	});

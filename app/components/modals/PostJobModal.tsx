@@ -37,6 +37,7 @@ enum STEPS {
 	IMAGE = 4,
 	DESCRIPTION = 5,
 	SALARY = 6,
+	APPLY = 7,
 }
 
 const PostJobModal = () => {
@@ -68,6 +69,7 @@ const PostJobModal = () => {
 			xpLevelValue: null,
 			jobTypeValue: null,
 			salary: 1,
+			jobApply: '',
 		},
 	});
 
@@ -102,7 +104,7 @@ const PostJobModal = () => {
 	};
 
 	const onSubmit: SubmitHandler<FieldValues> = (data) => {
-		if (step !== STEPS.SALARY) return onNext();
+		if (step !== STEPS.APPLY) return onNext();
 
 		setIsLoading(true);
 
@@ -124,7 +126,7 @@ const PostJobModal = () => {
 	};
 
 	const actionLabel = useMemo(() => {
-		if (step === STEPS.SALARY) return 'Create';
+		if (step === STEPS.APPLY) return 'Create';
 
 		return 'Next';
 	}, [step]);
@@ -282,10 +284,11 @@ const PostJobModal = () => {
 
 	if (step === STEPS.SALARY) {
 		bodyContent = (
-			<div>
+			<div className="flex flex-col gap-4">
 				<Heading
 					title="Salary"
 					subtitle="How much is the annual income for this position?"
+					center
 				/>
 				<Input
 					id="salary"
@@ -294,6 +297,26 @@ const PostJobModal = () => {
 					type="number"
 					register={register}
 					disabled={isLoading}
+					errors={errors}
+					required
+				/>
+			</div>
+		);
+	}
+
+	if (step === STEPS.APPLY) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="Application"
+					subtitle="Where should the candidate apply for this job? (E.g.: https://linkedin.com/in/...)"
+					center
+				/>
+				<Input
+					id="jobApply"
+					label="Application"
+					disabled={isLoading}
+					register={register}
 					errors={errors}
 					required
 				/>

@@ -55,6 +55,7 @@ model Listing {
   xpLevelValue  String
   jobTypeValue  String
   salary        Int
+  jobApply      String
   userId        String   @db.ObjectId
   createdAt     DateTime @default(now())
 
