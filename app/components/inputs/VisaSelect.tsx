@@ -1,7 +1,10 @@
 'use client';
 
-import useVisaSelect from '@/app/hooks/useVisaSelect';
+import { FC } from 'react';
+
 import Select from 'react-select';
+
+import useVisaSelect from '@/app/hooks/useVisaSelect';
 
 export type VisaSelectValue = {
 	label: string;
@@ -9,37 +12,37 @@ export type VisaSelectValue = {
 };
 
 interface VisaSelectProps {
-	value?: VisaSelectValue;
-	onChange: (value: VisaSelectValue) => void;
 	title: string;
 	subtitle: string;
+	value?: VisaSelectValue;
+	onChange: (value: VisaSelectValue) => void;
 }
 
-const VisaSelect: React.FC<VisaSelectProps> = ({
-	value,
-	onChange,
+const VisaSelect: FC<VisaSelectProps> = ({
 	title,
 	subtitle,
+	value,
+	onChange,
 }) => {
 	const { getAll } = useVisaSelect();
 
 	return (
-		<div className="flex flex-row items-start justify-between">
+		<div className="flex flex-col items-start gap-4">
 			<div className="flex flex-col">
 				<div className="font-medium">{title}</div>
 				<div className="font-light text-gray-600">{subtitle}</div>
 			</div>
 			<Select
-				placeholder="Select an option"
-				isClearable
-				options={getAll()}
 				value={value}
+				options={getAll()}
+				placeholder="Select an answer..."
 				onChange={(value) => onChange(value as VisaSelectValue)}
 				formatOptionLabel={(option: any) => (
 					<div className="flex flex-row items-center gap-3">
 						<div>{option.label}</div>
 					</div>
 				)}
+				className="w-full"
 				classNames={{
 					control: () => 'p-3 border-2',
 					input: () => 'text-lg',
@@ -48,11 +51,9 @@ const VisaSelect: React.FC<VisaSelectProps> = ({
 				theme={(theme) => ({
 					...theme,
 					borderRadius: 6,
-					colors: {
-						...theme.colors,
-						primary25: '#e4eeff',
-					},
+					colors: { ...theme.colors, primary25: '#e4eeff' },
 				})}
+				isClearable
 			/>
 		</div>
 	);

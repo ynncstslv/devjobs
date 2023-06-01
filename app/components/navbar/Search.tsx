@@ -4,15 +4,15 @@ import { BiSearch } from 'react-icons/bi';
 
 const Search = () => {
 	return (
-		<div className="border-[1px] w-full md:w-auto py-2 rounded-full shadow-sm hover:shadow-md transition cursor-pointer">
+		<div className="w-full py-2 border-[1px] rounded-full shadow-sm cursor-pointer transition hover:shadow-md md:w-auto">
 			<div className="flex flex-row items-center justify-between">
-				<div className="text-sm font-semibold px-6">Anywhere</div>
-				<div className="hidden sm:block text-sm font-semibold px-6 border-x-[1px] flex-1 text-center">
-					Experience Level
+				<div className="px-6 font-semibold text-sm">Anywhere</div>
+				<div className="hidden flex-1 px-6 font-semibold text-sm text-center border-x-[1px] sm:block">
+					Any Level
 				</div>
-				<div className="text-sm pl-6 pr-2 text-gray-600 flex flex-row items-center gap-3">
-					<div className="hidden sm:block">Job Type</div>
-					<div className="p-2 bg-blue-500 rounded-full text-white">
+				<div className="flex flex-row items-center gap-3 pr-2 pl-6 text-sm text-gray-600">
+					<div className="hidden sm:block">Visa</div>
+					<div className="p-2 text-white rounded-full bg-blue-600">
 						<BiSearch size={14} />
 					</div>
 				</div>

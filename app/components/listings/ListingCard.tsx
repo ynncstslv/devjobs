@@ -1,95 +1,114 @@
 'use client';
 
-import useCountries from '@/app/hooks/useCountries';
-import { SafeUser } from '@/app/types';
-import { Listing, Reservation } from '@prisma/client';
-import Image from 'next/image';
+import { FC, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useMemo } from 'react';
-import HeartButton from '../HeartButton';
+
+import Image from 'next/image';
+
+import { SafeUser } from '@/app/types';
+
+import useCountries from '@/app/hooks/useCountries';
+
+import { Listing } from '@prisma/client';
+
 import Button from '../Button';
+import HeartButton from '../HeartButton';
 
 interface ListingCardProps {
-	data: Listing;
-	reservation?: Reservation;
-	onAction?: (id: string) => void;
-	disabled?: boolean;
-	actionLabel?: string;
-	actionId?: string;
 	currentUser: SafeUser | null;
+	data: Listing;
+	actionId?: string;
+	actionLabel?: string;
+	disabled?: boolean;
+	onAction?: (id: string) => void;
 }
 
-const ListingCard: React.FC<ListingCardProps> = ({
-	data,
-	reservation,
-	onAction,
-	disabled,
-	actionLabel,
-	actionId = '',
+const ListingCard: FC<ListingCardProps> = ({
 	currentUser,
+	data,
+	actionId = '',
+	actionLabel,
+	disabled,
+	onAction,
 }) => {
 	const router = useRouter();
+
 	const { getByValue } = useCountries();
 
 	const location = getByValue(data.locationValue);
 
-	// const handleCancel = useCallback(
-	// 	(e: React.MouseEvent<HTMLButtonElement>) => {
-	// 		e.stopPropagation();
-
-	// 		if (disabled) {
-	// 			return;
-	// 		}
-
-	// 		onAction?.(actionId);
-	// 	},
-	// 	[onAction, actionId, disabled]
-	// );
-
-	// const salary = useMemo(() => {
-	// 	if (reservation) {
-	// 		return reservation.totalPrice;
-	// 	}
-
-	// 	return data.salary;
-	// }, [reservation, data.salary]);
-
-	// const reservationDate = useMemo(() => {
-	// 	if (!reservation) {
-	// 		return null;
-	// 	}
-
-	// 	const start = new Date(reservation.startDate);
-	// 	const end = new Date(reservation.endDate);
-	// }, []);
-
 	return (
 		<div
+			className="group col-span-1 cursor-pointer"
 			onClick={() => router.push(`/listings/${data.id}`)}
-			className="col-span-1 cursor-pointer group"
 		>
-			<div className="flex flex-col gap-2 w-full">
-				<div className="flex flex-row gap-3 items-center">
-					<div className="aspect-square w-[100px] relative overflow-hidden rounded-xl">
+			<div className="w-full flex flex-col gap-2 p-4 border-[1px] border-neutral-200 rounded-lg shadow-sm group-hover:shadow-lg">
+				<div className="flex flex-row items-center gap-5">
+					<div className="aspect-square w-[100px] relative rounded-xl overflow-hidden">
 						<Image
-							alt="Listing"
 							src={data.imageSrc}
-							className="object-cover h-full w-full group-hover:scale-110 transition"
+							alt="Listing Logo"
+							className="w-full h-full object-cover transition group-hover:scale-110"
+							fill
+						/>
+					</div>
+					<div className="flex flex-col gap-1">
+						<div className="font-light text-sm text-neutral-600">
+							{data.company}
+						</div>
+						<div className="font-bold text-lg">{data.title}</div>
+						<div className="font-light text-xs text-neutral-500">
+							{location?.label}, {location?.region}
+						</div>
+						<div className="font-semibold text-md text-neutral-800/80">
+							$ {data.salary}{' '}
+							<span className="font-light text-neutral-500">/ Year</span>
+						</div>
+					</div>
+				</div>
+				<div className="flex items-center justify-between mt-6 text-[11px] font-light text-neutral-100">
+					<div className="flex items-center justify-start gap-2">
+						<div className="rounded-md bg-blue-950 py-2 px-3">
+							{data.category}
+						</div>
+						<div className="rounded-md bg-blue-950 py-2 px-3">
+							{data.xpLevelValue}
+						</div>
+						<div className="rounded-md bg-blue-950 py-2 px-3">
+							{data.jobTypeValue}
+						</div>
+					</div>
+					<div className="">
+						<HeartButton listingId={data.id} currentUser={currentUser} />
+					</div>
+				</div>
+			</div>
+			{/* <div className="w-full flex flex-col gap-2">
+				<div className="flex flex-row items-center gap-3">
+					<div className="aspect-square w-[100px] relative rounded-xl overflow-hidden">
+						<Image
+							src={data.imageSrc}
+							alt="Listing Logo"
+							className="w-full h-full object-cover transition group-hover:scale-110"
 							fill
 						/>
 					</div>
 					<div className="flex flex-col gap-2">
+						<div className="font-light text-sm text-neutral-700">
+							{data.company}
+						</div>
 						<div className="font-bold text-lg">{data.title}</div>
 						<hr />
-						<div className="font-light text-neutral-500 text-sm">
+						<div className="font-light text-sm text-neutral-500">
 							{location?.label}, {location?.region}
 						</div>
-						<div className="text-md font-semibold text-neutral-800/70">
-							$ {data.salary} <span>/ Year</span>
+						<div className="font-semibold text-md text-neutral-800/70">
+							$ {data.salary}{' '}
+							<span className="font-light text-neutral-400">/ Year</span>
 						</div>
 					</div>
 				</div>
-				<div className="font-light text-neutral-100 text-[10px] flex items-center justify-between gap-2 mt-2">
+				<div className="flex items-center justify-between gap-2 mt-2 text-[10px] font-light text-neutral-100">
 					<div className="rounded-md bg-blue-600 py-2 px-3">
 						{data.category}
 					</div>
@@ -103,46 +122,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
 						<HeartButton listingId={data.id} currentUser={currentUser} />
 					</div>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
-
-	// return (
-	// 	<div
-	// 		onClick={() => router.push(`/listings/${data.id}`)}
-	// 		className="col-span-1 cursor-pointer group"
-	// 	>
-	// 		<div className="flex flex-col gap-2 w-full">
-	// 			<div className="aspect-square w-full relative overflow-hidden rounded-xl">
-	// 				<Image
-	// 					alt="Listing"
-	// 					src={data.imageSrc}
-	// 					className="object-cover h-full w-full group-hover:scale-110 transition"
-	// 					fill
-	// 				/>
-	// 				<div className="absolute top-3 right-3">
-	// 					<HeartButton listingId={data.id} currentUser={currentUser} />
-	// 				</div>
-	// 			</div>
-	// 			<div className="font-semibold text-lg">
-	// 				{location?.label}, {location?.region}
-	// 			</div>
-	// 			<div className="font-light text-neutral-500">{data.category}</div>
-	// 			<div className="flex flex-row items-center gap-1">
-	// 				<div className="font-semibold">$ {data.salary}</div>
-	// 				<div className="font-light">/ Year</div>
-	// 			</div>
-	// 			{onAction && actionLabel && (
-	// 				<Button
-	// 					disabled={disabled}
-	// 					small
-	// 					label={actionLabel}
-	// 					onClick={() => {}}
-	// 				/>
-	// 			)}
-	// 		</div>
-	// 	</div>
-	// );
 };
 
 export default ListingCard;

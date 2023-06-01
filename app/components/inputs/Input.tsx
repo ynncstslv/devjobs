@@ -1,52 +1,57 @@
 'use client';
 
+import { FC } from 'react';
+
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
+
 import { BiDollar } from 'react-icons/bi';
 
 interface InputProps {
 	id: string;
 	label: string;
 	type?: string;
-	disabled?: boolean;
-	formatSalary?: boolean;
 	required?: boolean;
+	disabled?: boolean;
 	register: UseFormRegister<FieldValues>;
+	formatSalary?: boolean;
 	errors: FieldErrors;
 }
 
-const Input: React.FC<InputProps> = ({
+const Input: FC<InputProps> = ({
 	id,
 	label,
 	type = 'text',
-	disabled,
-	formatSalary,
 	required,
+	disabled,
 	register,
+	formatSalary,
 	errors,
 }) => {
 	return (
 		<div className="w-full relative">
 			{formatSalary && (
 				<BiDollar
-					size={24}
-					className="text-neutral-700 absolute top-5 left-2"
+					size={22}
+					className="absolute top-9 left-3 text-neutral-700"
 				/>
 			)}
 			<input
 				id={id}
-				disabled={disabled}
-				{...register(id, { required })}
 				type={type}
 				placeholder=" "
-				className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed ${
-					formatSalary ? 'pl-9' : 'pl-4'
-				} ${errors[id] ? 'border-rose-500' : 'border-neutral-300'} ${
-					errors[id] ? 'focus:border-rose-500' : 'focus:border-black'
+				className={`peer w-full p-2.5 pt-6 pl-7 font-light border-2 rounded-full outline-none bg-white transition disabled:opacity-70 disabled:cursor-not-allowed ${
+					formatSalary ? 'pl-11 mt-4' : 'pl-4'
+				} ${
+					errors[id]
+						? 'border-rose-500 focus:border-rose-500'
+						: 'border-neutral-300 focus:border-black'
 				}`}
+				{...register(id, { required })}
+				disabled={disabled}
 			/>
 			<label
-				className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] ${
-					formatSalary ? 'left-9' : 'left-4'
+				className={`absolute top-5 left-7 text-sm transform origin-[0] -translate-y-3 duration-150 z-10 ${
+					formatSalary ? 'top-9 left-11' : 'left-4'
 				} peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
 					errors[id] ? 'text-rose-500' : 'text-zinc-400'
 				}`}

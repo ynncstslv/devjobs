@@ -1,7 +1,10 @@
 'use client';
 
-import useJobType from '@/app/hooks/useJobType';
+import { FC } from 'react';
+
 import Select from 'react-select';
+
+import useJobType from '@/app/hooks/useJobType';
 
 export type JobTypeValue = {
 	label: string;
@@ -9,18 +12,13 @@ export type JobTypeValue = {
 };
 
 interface JobTypeProps {
-	value?: JobTypeValue;
-	onChange: (value: JobTypeValue) => void;
 	title: string;
 	subtitle: string;
+	value?: JobTypeValue;
+	onChange: (value: JobTypeValue) => void;
 }
 
-const JobType: React.FC<JobTypeProps> = ({
-	value,
-	onChange,
-	title,
-	subtitle,
-}) => {
+const JobType: FC<JobTypeProps> = ({ title, subtitle, value, onChange }) => {
 	const { getAll } = useJobType();
 
 	return (
@@ -30,10 +28,9 @@ const JobType: React.FC<JobTypeProps> = ({
 				<div className="font-light text-gray-600">{subtitle}</div>
 			</div>
 			<Select
-				placeholder="Any"
-				isClearable
-				options={getAll()}
 				value={value}
+				options={getAll()}
+				placeholder="Any Type"
 				onChange={(value) => onChange(value as JobTypeValue)}
 				formatOptionLabel={(option: any) => (
 					<div className="flex flex-row items-center gap-3">
@@ -49,11 +46,9 @@ const JobType: React.FC<JobTypeProps> = ({
 				theme={(theme) => ({
 					...theme,
 					borderRadius: 6,
-					colors: {
-						...theme.colors,
-						primary25: '#e4eeff',
-					},
+					colors: { ...theme.colors, primary25: '#e4eeff' },
 				})}
+				isClearable
 			/>
 		</div>
 	);

@@ -1,29 +1,28 @@
 'use client';
 
-import { useCallback } from 'react';
+import { FC, useCallback } from 'react';
+
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
-interface CounterTimesProps {
+interface CounterFiveProps {
 	title: string;
 	subtitle: string;
 	value: number;
 	onChange: (value: number) => void;
 }
 
-const CounterTimes: React.FC<CounterTimesProps> = ({
+const CounterFive: FC<CounterFiveProps> = ({
 	title,
 	subtitle,
 	value,
 	onChange,
 }) => {
-	const onAddTimes = useCallback(() => {
+	const onAddFive = useCallback(() => {
 		onChange(value + 5);
-	}, [onChange, value]);
+	}, [value, onChange]);
 
-	const onReduceTimes = useCallback(() => {
-		if (value === 5) {
-			return;
-		}
+	const onReduceFive = useCallback(() => {
+		if (value === 5) return;
 
 		onChange(value - 5);
 	}, [value, onChange]);
@@ -36,15 +35,15 @@ const CounterTimes: React.FC<CounterTimesProps> = ({
 			</div>
 			<div className="flex flex-row items-center gap-4">
 				<div
-					onClick={onReduceTimes}
-					className="w-10 h-10 rounded-full border-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition"
+					className="w-10 h-10 flex items-center justify-center text-neutral-600 border-[1px] rounded-full border-neutral-400 cursor-pointer transition hover:opacity-80"
+					onClick={onReduceFive}
 				>
 					<AiOutlineMinus />
 				</div>
 				<div className="font-light text-xl text-neutral-600">{value}</div>
 				<div
-					onClick={onAddTimes}
-					className="w-10 h-10 rounded-full border-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition"
+					className="w-10 h-10 flex items-center justify-center text-neutral-600 border-[1px] rounded-full border-neutral-400 cursor-pointer transition hover:opacity-80"
+					onClick={onAddFive}
 				>
 					<AiOutlinePlus />
 				</div>
@@ -53,4 +52,4 @@ const CounterTimes: React.FC<CounterTimesProps> = ({
 	);
 };
 
-export default CounterTimes;
+export default CounterFive;

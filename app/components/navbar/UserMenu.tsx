@@ -1,23 +1,27 @@
 'use client';
 
-import { AiOutlineMenu } from 'react-icons/ai';
-import Avatar from '../Avatar';
-import { useCallback, useState } from 'react';
-import MenuItem from './MenuItem';
-import useRegisterModal from '@/app/hooks/useRegisterModal';
-import useLoginModal from '@/app/hooks/useLoginModal';
+import { FC, useCallback, useState } from 'react';
 import { signOut } from 'next-auth/react';
+
 import { SafeUser } from '@/app/types';
+
+import useLoginModal from '@/app/hooks/useLoginModal';
 import usePostJobModal from '@/app/hooks/usePostJobModal';
+import useRegisterModal from '@/app/hooks/useRegisterModal';
+
+import Avatar from '../Avatar';
+import MenuItem from './MenuItem';
+
+import { AiOutlineMenu } from 'react-icons/ai';
 
 interface UserMenuProps {
 	currentUser?: SafeUser | null;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
-	const registerModal = useRegisterModal();
+const UserMenu: FC<UserMenuProps> = ({ currentUser }) => {
 	const loginModal = useLoginModal();
 	const postJobModal = usePostJobModal();
+	const registerModal = useRegisterModal();
 
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -26,9 +30,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 	}, []);
 
 	const onJobs = useCallback(() => {
-		if (!currentUser) {
-			return loginModal.onOpen();
-		}
+		if (!currentUser) return loginModal.onOpen();
 
 		postJobModal.onOpen();
 	}, [currentUser, loginModal, postJobModal]);
@@ -37,14 +39,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 		<div className="relative">
 			<div className="flex flex-row items-center gap-3">
 				<div
+					className="hidden px-4 py-3 font-semibold text-sm rounded-full cursor-pointer transition hover:bg-neutral-100 md:block"
 					onClick={onJobs}
-					className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
 				>
-					Post a job
+					Post a Job
 				</div>
 				<div
+					className="flex flex-row items-center gap-3 p-4 border-[1px] rounded-full border-neutral-200 cursor-pointer transition hover:shadow-md md:px-2 md:py-1"
 					onClick={toggleOpen}
-					className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
 				>
 					<AiOutlineMenu />
 					<div className="hidden md:block">
@@ -53,21 +55,20 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 				</div>
 			</div>
 			{isOpen && (
-				<div className="absolute rounded-xl shadow-md w-[48vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm">
+				<div className="w-[48vw] absolute top-14 right-0 text-sm border-[1px] rounded-xl border-neutral-200 bg-white shadow-md overflow-hidden md:w-3/4 md:top-12">
 					<div className="flex flex-col cursor-pointer">
 						{currentUser ? (
 							<>
-								<MenuItem onClick={() => {}} label="My Account" />
-								<MenuItem onClick={() => {}} label="My Favorites" />
-								<MenuItem onClick={() => {}} label="My Jobs" />
-								<MenuItem onClick={postJobModal.onOpen} label="Post a Job" />
+								<MenuItem label="My Favorites" onClick={() => {}} />
+								<MenuItem label="My Jobs" onClick={() => {}} />
+								<MenuItem label="Post a Job" onClick={postJobModal.onOpen} />
 								<hr />
-								<MenuItem onClick={() => signOut()} label="Logout" />
+								<MenuItem label="Logout" onClick={() => signOut()} />
 							</>
 						) : (
 							<>
-								<MenuItem onClick={loginModal.onOpen} label="Login" />
-								<MenuItem onClick={registerModal.onOpen} label="Sign Up" />
+								<MenuItem label="Login" onClick={loginModal.onOpen} />
+								<MenuItem label="Register" onClick={registerModal.onOpen} />
 							</>
 						)}
 					</div>

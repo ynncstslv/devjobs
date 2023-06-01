@@ -1,44 +1,41 @@
 'use client';
 
+import { FC } from 'react';
+
 import { IconType } from 'react-icons';
 
 interface ButtonProps {
 	label: string;
-	onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-	disabled?: boolean;
-	outline?: boolean;
-	small?: boolean;
 	icon?: IconType;
+	small?: boolean;
+	outline?: boolean;
+	disabled?: boolean;
+	onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Button: FC<ButtonProps> = ({
 	label,
-	onClick,
-	disabled,
-	outline,
-	small,
 	icon: Icon,
+	small,
+	outline,
+	disabled,
+	onClick,
 }) => {
 	return (
 		<button
-			onClick={onClick}
+			className={`w-full relative rounded-full transition hover:opacity-80 disabled:opacity-70 disabled:cursor-not-allowed ${
+				small
+					? 'py-1 font-light text-sm border-[1px]'
+					: 'py-3 font-semibold text-md border-2'
+			} ${
+				outline
+					? 'text-black border-black bg-white'
+					: 'text-white border-blue-600 bg-blue-600'
+			}`}
 			disabled={disabled}
-			className={`
-            relative
-            disabled:opacity-70
-            disabled:cursor-not-allowed
-            rounded-lg
-            hover:opacity-80
-            transition w-full
-            ${outline ? 'bg-white' : 'bg-blue-500'}
-            ${outline ? 'border-black' : 'border-blue-500'}
-            ${outline ? 'text-black' : 'text-white'}
-            ${small ? 'py-1' : 'py-3'}
-            ${small ? 'text-sm' : 'text-md'}
-            ${small ? 'font-light' : 'font-semibold'}
-            ${small ? 'border-[1px]' : 'border-2'}`}
+			onClick={onClick}
 		>
-			{Icon && <Icon size={24} className="absolute left-4 top-3" />}
+			{Icon && <Icon size={24} className="absolute top-3 left-4" />}
 			{label}
 		</button>
 	);

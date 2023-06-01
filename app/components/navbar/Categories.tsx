@@ -1,7 +1,11 @@
 'use client';
 
-import { FC } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+
+import CategoryBox from '../CategoryBox';
 import Container from '../Container';
+
+import { FaJava } from 'react-icons/fa';
 import {
 	SiHtml5,
 	SiCss3,
@@ -30,9 +34,6 @@ import {
 	SiRuby,
 	SiDocker,
 } from 'react-icons/si';
-import { FaJava } from 'react-icons/fa';
-import CategoryBox from '../CategoryBox';
-import { usePathname, useSearchParams } from 'next/navigation';
 
 export const categories = [
 	{
@@ -146,24 +147,23 @@ export const categories = [
 ];
 
 const Categories = () => {
-	const params = useSearchParams();
-	const category = params?.get('category');
 	const pathname = usePathname();
+	const params = useSearchParams();
+
+	const category = params?.get('category');
 
 	const isMainPage = pathname === '/';
 
-	if (!isMainPage) {
-		return null;
-	}
+	if (!isMainPage) return null;
 
 	return (
 		<Container>
-			<div className="pt-4 flex flex-row items-center justify-between overflow-x-auto">
+			<div className="flex flex-row items-center justify-between pt-4 overflow-x-auto">
 				{categories.map((item) => (
 					<CategoryBox
 						key={item.label}
-						label={item.label}
 						icon={item.icon}
+						label={item.label}
 						selected={category === item.label}
 					/>
 				))}

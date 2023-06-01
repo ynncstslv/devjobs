@@ -1,15 +1,17 @@
 'use client';
 
+import { FC } from 'react';
+
 interface MenuItemProps {
-	onClick: () => void;
 	label: string;
+	onClick: () => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ onClick, label }) => {
+const MenuItem: FC<MenuItemProps> = ({ label, onClick }) => {
 	return (
 		<div
+			className="px-4 py-3 font-semibold transition hover:bg-neutral-100"
 			onClick={onClick}
-			className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
 		>
 			{label}
 		</div>

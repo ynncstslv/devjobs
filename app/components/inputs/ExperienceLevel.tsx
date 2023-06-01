@@ -1,25 +1,28 @@
 'use client';
 
-import useExperienceLevel from '@/app/hooks/useExperienceLevel';
+import { FC } from 'react';
+
 import Select from 'react-select';
+
+import useExperienceLevel from '@/app/hooks/useExperienceLevel';
 
 export type ExperienceLevelValue = {
 	label: string;
 	value: string;
 };
 
-interface ExperienceSelectProps {
-	value?: ExperienceLevelValue;
-	onChange: (value: ExperienceLevelValue) => void;
+interface ExperienceLevelProps {
 	title: string;
 	subtitle: string;
+	value?: ExperienceLevelValue;
+	onChange: (value: ExperienceLevelValue) => void;
 }
 
-const ExperienceLevel: React.FC<ExperienceSelectProps> = ({
-	value,
-	onChange,
+const ExperienceLevel: FC<ExperienceLevelProps> = ({
 	title,
 	subtitle,
+	value,
+	onChange,
 }) => {
 	const { getAll } = useExperienceLevel();
 
@@ -30,10 +33,9 @@ const ExperienceLevel: React.FC<ExperienceSelectProps> = ({
 				<div className="font-light text-gray-600">{subtitle}</div>
 			</div>
 			<Select
-				placeholder="Any"
-				isClearable
-				options={getAll()}
 				value={value}
+				options={getAll()}
+				placeholder="Any Level"
 				onChange={(value) => onChange(value as ExperienceLevelValue)}
 				formatOptionLabel={(option: any) => (
 					<div className="flex flex-row items-center gap-3">
@@ -49,11 +51,9 @@ const ExperienceLevel: React.FC<ExperienceSelectProps> = ({
 				theme={(theme) => ({
 					...theme,
 					borderRadius: 6,
-					colors: {
-						...theme.colors,
-						primary25: '#e4eeff',
-					},
+					colors: { ...theme.colors, primary25: '#e4eeff' },
 				})}
+				isClearable
 			/>
 		</div>
 	);

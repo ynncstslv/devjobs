@@ -1,40 +1,51 @@
 'use client';
 
-import usePostJobModal from '@/app/hooks/usePostJobModal';
-import Modal from './Modal';
 import { useMemo, useState } from 'react';
-import Heading from '../Heading';
-import { categories } from '../navbar/Categories';
-import CategoryInput from '../inputs/CategoryInput';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import CountrySelect from '../inputs/CountrySelect';
+
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+
+import { toast } from 'react-hot-toast';
+
+import usePostJobModal from '@/app/hooks/usePostJobModal';
+
+import axios from 'axios';
+
+import Heading from '../Heading';
+import Modal from './Modal';
+
+import { categories } from '../navbar/Categories';
+
+import CategoryInput from '../inputs/CategoryInput';
 import Counter from '../inputs/Counter';
-import CounterTimes from '../inputs/CounterTimes';
+import CounterFive from '../inputs/CounterFive';
+import CountrySelect from '../inputs/CountrySelect';
 import ExperienceLevel from '../inputs/ExperienceLevel';
-import VisaSelect from '../inputs/VisaSelect';
-import JobType from '../inputs/JobType';
 import ImageUpload from '../inputs/ImageUpload';
 import Input from '../inputs/Input';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import JobType from '../inputs/JobType';
+import Textarea from '../inputs/Textarea';
+import VisaSelect from '../inputs/VisaSelect';
 
 enum STEPS {
 	CATEGORY = 0,
 	LOCATION = 1,
 	INFO = 2,
-	IMAGE = 3,
-	DESCRIPTION = 4,
-	SALARY = 5,
+	COMPANY = 3,
+	IMAGE = 4,
+	DESCRIPTION = 5,
+	SALARY = 6,
 }
 
 const PostJobModal = () => {
 	const router = useRouter();
+
 	const postJobModal = usePostJobModal();
 
-	const [step, setStep] = useState(STEPS.CATEGORY);
 	const [isLoading, setIsLoading] = useState(false);
+	const [step, setStep] = useState(STEPS.CATEGORY);
 
 	const {
 		register,
@@ -45,28 +56,29 @@ const PostJobModal = () => {
 		reset,
 	} = useForm<FieldValues>({
 		defaultValues: {
-			category: '',
-			location: null,
+			title: '',
+			description: '',
 			imageSrc: '',
-			xpCount: 1,
+			category: '',
+			company: '',
 			employeeCount: 5,
+			xpCount: 1,
+			location: null,
 			visaValue: null,
 			xpLevelValue: null,
 			jobTypeValue: null,
 			salary: 1,
-			title: '',
-			description: '',
 		},
 	});
 
-	const category = watch('category');
-	const location = watch('location');
-	const xpCount = watch('xpCount');
-	const employeeCount = watch('employeeCount');
-	const jobTypeValue = watch('jobTypeValue');
-	const xpLevelValue = watch('xpLevelValue');
-	const visaValue = watch('visaValue');
 	const imageSrc = watch('imageSrc');
+	const category = watch('category');
+	const employeeCount = watch('employeeCount');
+	const xpCount = watch('xpCount');
+	const location = watch('location');
+	const visaValue = watch('visaValue');
+	const xpLevelValue = watch('xpLevelValue');
+	const jobTypeValue = watch('jobTypeValue');
 
 	const Map = useMemo(
 		() => dynamic(() => import('../Map'), { ssr: false }),
@@ -90,16 +102,14 @@ const PostJobModal = () => {
 	};
 
 	const onSubmit: SubmitHandler<FieldValues> = (data) => {
-		if (step !== STEPS.SALARY) {
-			return onNext();
-		}
+		if (step !== STEPS.SALARY) return onNext();
 
 		setIsLoading(true);
 
 		axios
 			.post('/api/listings', data)
 			.then(() => {
-				toast.success('Listing Created!');
+				toast.success('Job Created!');
 				router.refresh();
 				reset();
 				setStep(STEPS.CATEGORY);
@@ -114,17 +124,13 @@ const PostJobModal = () => {
 	};
 
 	const actionLabel = useMemo(() => {
-		if (step === STEPS.SALARY) {
-			return 'Create';
-		}
+		if (step === STEPS.SALARY) return 'Create';
 
 		return 'Next';
 	}, [step]);
 
 	const secondaryActionLabel = useMemo(() => {
-		if (step === STEPS.CATEGORY) {
-			return undefined;
-		}
+		if (step === STEPS.CATEGORY) return undefined;
 
 		return 'Back';
 	}, [step]);
@@ -132,17 +138,18 @@ const PostJobModal = () => {
 	let bodyContent = (
 		<div className="flex flex-col gap-8">
 			<Heading
-				title="Which of these best describes the main technology you are looking for?"
-				subtitle="Pick a Category"
+				title="Pick a Category!"
+				subtitle="Which of these best describes the main technology you are looking for?"
+				center
 			/>
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto">
+			<div className="max-h-[50vh] grid grid-cols-1 gap-3 overflow-y-auto md:grid-cols-2">
 				{categories.map((item) => (
 					<div key={item.label} className="col-span-1">
 						<CategoryInput
-							onClick={(category) => setCustomValue('category', category)}
-							selected={category === item.label}
-							label={item.label}
 							icon={item.icon}
+							label={item.label}
+							selected={category === item.label}
+							onClick={(category) => setCustomValue('category', category)}
 						/>
 					</div>
 				))}
@@ -153,10 +160,7 @@ const PostJobModal = () => {
 	if (step === STEPS.LOCATION) {
 		bodyContent = (
 			<div className="flex flex-col gap-8">
-				<Heading
-					title="Where is the job located?"
-					subtitle="Help candidates find you!"
-				/>
+				<Heading title="Location" subtitle="Where is the job located?" center />
 				<CountrySelect
 					value={location}
 					onChange={(value) => setCustomValue('location', value)}
@@ -168,46 +172,66 @@ const PostJobModal = () => {
 
 	if (step === STEPS.INFO) {
 		bodyContent = (
-			<div className="flex flex-col gap-8 max-h-[70vh] overflow-y-auto">
+			<div className="flex flex-col gap-8">
 				<Heading
-					title="What is the job?"
-					subtitle="Share some information about your company and the job"
+					title="Job Information"
+					subtitle="Share some information about this position."
+					center
 				/>
-				<CounterTimes
-					title="Company Size"
-					subtitle="How many employees your company have?"
-					value={employeeCount}
-					onChange={(value) => setCustomValue('employeeCount', value)}
-				/>
-				<hr />
-				<Counter
-					title="Experience"
-					subtitle="How many years of experience are you looking for?"
-					value={xpCount}
-					onChange={(value) => setCustomValue('xpCount', value)}
-				/>
-				<hr />
 				<JobType
 					title="Job Type"
-					subtitle="What is the type of the job?"
+					subtitle="What type of job is this?"
 					value={jobTypeValue}
 					onChange={(value) => setCustomValue('jobTypeValue', value)}
 				/>
 				<hr />
 				<ExperienceLevel
 					title="Experience Level"
-					subtitle="What is the experience level you are looking for?"
+					subtitle="What experience level would suit this position?"
 					value={xpLevelValue}
 					onChange={(value) => setCustomValue('xpLevelValue', value)}
 				/>
 				<hr />
+				<Counter
+					title="Experience"
+					subtitle="How many years of experience a candidate should have for this job?"
+					value={xpCount}
+					onChange={(value) => setCustomValue('xpCount', value)}
+				/>
+			</div>
+		);
+	}
+
+	if (step === STEPS.COMPANY) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading
+					title="Company"
+					subtitle="Share a little about your company."
+					center
+				/>
+				<Input
+					id="company"
+					label="Company Name"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+					required
+				/>
+				<hr />
 				<VisaSelect
 					title="Visa Sponsorship"
-					subtitle="Does it offer sponsorship?"
+					subtitle="Does your company offer visa sponsorship?"
 					value={visaValue}
 					onChange={(value) => setCustomValue('visaValue', value)}
 				/>
 				<hr />
+				<CounterFive
+					title="Company Size"
+					subtitle="How many employees does your company have?"
+					value={employeeCount}
+					onChange={(value) => setCustomValue('employeeCount', value)}
+				/>
 			</div>
 		);
 	}
@@ -216,8 +240,9 @@ const PostJobModal = () => {
 		bodyContent = (
 			<div className="flex flex-col gap-8">
 				<Heading
-					title="Add a banner for your company"
-					subtitle="Show your brand to the candidates!"
+					title="Company's Logo"
+					subtitle="Sharing your logo makes it easier to identify you!"
+					center
 				/>
 				<ImageUpload
 					value={imageSrc}
@@ -231,21 +256,21 @@ const PostJobModal = () => {
 		bodyContent = (
 			<div className="flex flex-col gap-8">
 				<Heading
-					title="How would you describe the job?"
-					subtitle="Short and objective works best!"
+					title="Job Description"
+					subtitle="A short name works best (E.g.: Software Engineer)."
+					center
 				/>
 				<Input
 					id="title"
-					label="Title"
+					label="Job Title"
 					disabled={isLoading}
 					register={register}
 					errors={errors}
 					required
 				/>
-				<hr />
-				<Input
+				<Textarea
 					id="description"
-					label="Description"
+					label="Job Description"
 					disabled={isLoading}
 					register={register}
 					errors={errors}
@@ -260,7 +285,7 @@ const PostJobModal = () => {
 			<div>
 				<Heading
 					title="Salary"
-					subtitle="How much is the annual salary for this opening?"
+					subtitle="How much is the annual income for this position?"
 				/>
 				<Input
 					id="salary"
@@ -279,13 +304,13 @@ const PostJobModal = () => {
 	return (
 		<Modal
 			title="Post a Job"
-			actionLabel={actionLabel}
-			secondaryActionLabel={secondaryActionLabel}
-			secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-			isOpen={postJobModal.isOpen}
-			onClose={postJobModal.onClose}
-			onSubmit={handleSubmit(onSubmit)}
 			body={bodyContent}
+			isOpen={postJobModal.isOpen}
+			actionLabel={actionLabel}
+			secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
+			secondaryActionLabel={secondaryActionLabel}
+			onSubmit={handleSubmit(onSubmit)}
+			onClose={postJobModal.onClose}
 		/>
 	);
 };

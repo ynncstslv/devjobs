@@ -1,8 +1,11 @@
 'use client';
 
-import { CldUploadWidget } from 'next-cloudinary';
+import { FC, useCallback } from 'react';
+
 import Image from 'next/image';
-import { useCallback } from 'react';
+
+import { CldUploadWidget } from 'next-cloudinary';
+
 import { TbPhotoPlus } from 'react-icons/tb';
 
 declare global {
@@ -10,11 +13,11 @@ declare global {
 }
 
 interface ImageUploadProps {
-	onChange: (value: string) => void;
 	value: string;
+	onChange: (value: string) => void;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
+const ImageUpload: FC<ImageUploadProps> = ({ value, onChange }) => {
 	const handleUpload = useCallback(
 		(result: any) => {
 			onChange(result.info.secure_url);
@@ -24,25 +27,27 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
 
 	return (
 		<CldUploadWidget
-			onUpload={handleUpload}
-			uploadPreset="qxr27xdn"
 			options={{ maxFiles: 1 }}
+			uploadPreset="qxr27xdn"
+			onUpload={handleUpload}
 		>
 			{({ open }) => {
 				return (
 					<div
+						className="flex flex-col items-center justify-center gap-4 relative p-20 text-neutral-600 border-2 border-dashed border-neutral-300 cursor-pointer transition hover:opacity-70"
 						onClick={() => open?.()}
-						className="relative cursor-pointer hover:opacity-70 transition border-dashed border-2 p-20 border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600"
 					>
 						<TbPhotoPlus size={50} />
-						<div className="font-semibold text-lg">Click to Upload</div>
+						<div className="font-semibold text-lg">
+							Click to Upload an Image
+						</div>
 						{value && (
-							<div className="absolute inset-0 w-full h-full">
+							<div className="w-full h-full absolute inset-0">
 								<Image
-									alt="Upload"
-									fill
-									style={{ objectFit: 'cover' }}
 									src={value}
+									alt="Upload"
+									style={{ objectFit: 'cover' }}
+									fill
 								/>
 							</div>
 						)}
