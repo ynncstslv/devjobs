@@ -22,7 +22,7 @@ const ListingInfo: FC<ListingInfoProps> = ({ user, description }) => {
 				</div>
 			</div>
 			<div className="font-bold text-lg">Job Description:</div>
-			<div className="h-[50vh] p-6 text-neutral-700 leading-7 border-2 rounded-xl border-neutral-100 overflow-y-auto">
+			<div className="h-[50vh] p-3 text-neutral-700 leading-7 rounded-xl overflow-y-auto">
 				{description}
 			</div>
 		</div>

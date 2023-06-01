@@ -11,6 +11,7 @@ import { IconType } from 'react-icons';
 
 import HeartButton from '../HeartButton';
 import ListingCategory from './ListingCategory';
+import Button from '../Button';
 
 interface ListingHeadProps {
 	currentUser?: SafeUser | null;
@@ -49,8 +50,8 @@ const ListingHead: FC<ListingHeadProps> = ({
 	return (
 		<>
 			<div className="w-full h-full">
-				<div className="flex flex-col items-center justify-between gap-8 lg:flex-row lg:gap-6">
-					<div className="aspect-square w-[300px] relative rounded-xl overflow-hidden md:w-[350px] lg:w-[500px]">
+				<div className="flex flex-col items-center justify-evenly gap-8 md:flex-row lg:gap-6">
+					<div className="aspect-square w-[300px] relative rounded-xl overflow-hidden md:w-[320px] md:h-[45vh] lg:w-[500px] lg:h-full">
 						<Image
 							src={imageSrc}
 							alt="Image"
@@ -58,69 +59,75 @@ const ListingHead: FC<ListingHeadProps> = ({
 							fill
 						/>
 					</div>
-					<div className="flex flex-col gap-8">
-						<div className="flex flex-row items-center justify-between">
-							<div className="font-bold text-4xl lg:text-6xl">{title}</div>
-							<HeartButton currentUser={currentUser} listingId={id} />
-						</div>
-						<hr />
-						<div className="flex flex-col gap-4">
-							<div className="flex flex-row items-center gap-6">
-								<div className="font-semibold text-xl lg:text-2xl text-blue-950">
-									{company}
-								</div>
-								<div className="font-medium text-sm text-neutral-500 lg:text-md">
-									{employeeCount} Employees
-								</div>
+					<div className="flex flex-col gap-6">
+						<div className="font-bold text-4xl">{title}</div>
+						<div className="flex flex-col gap-2">
+							<div className="font-semibold text-xl lg:text-2xl text-blue-950">
+								{company}
 							</div>
-							<div className="font-md text-sm text-neutral-500 lg:text-lg">
-								{location?.label}, {location?.region}
+							<div className="flex flex-row items-center gap-6 font-medium text-sm text-neutral-500 lg:text-md">
+								<div>
+									{location?.label}, {location?.region}
+								</div>
+								<div>{employeeCount} Employees</div>
 							</div>
 						</div>
 						<hr />
-						<div className="w-full p-6 rounded-xl bg-neutral-100 lg:p-8">
-							<div className="mb-6 font-bold text-xl">Job Info:</div>
-							<div className="w-full grid grid-cols-2 items-center justify-between gap-4 lg:gap-x-[3rem] lg:gap-y-4">
+						<div className="w-full p-6 rounded-xl bg-neutral-100">
+							<div className="mb-4 font-bold text-lg">Job Info:</div>
+							<div className="w-full grid grid-cols-2 items-center justify-between gap-4 font-semibold text-sm text-blue-600 lg:text-base">
 								{category && (
 									<ListingCategory
 										icon={category.icon}
 										label={category.label}
 									/>
 								)}
-								<div className="font-semibold text-sm text-blue-600 lg:text-base">
-									<span className="text-xs text-neutral-500 lg:pr-1.5 lg:text-sm">
+								<div>
+									<span className="text-xs text-neutral-500 lg:text-sm">
 										Salary:{' '}
 									</span>
 									$ {salary}{' '}
-									<span className="text-xs text-neutral-500 lg:pr-1.5 lg:text-sm">
-										/ Year
+									<span className="text-xs text-neutral-500 lg:text-sm">
+										/ y
 									</span>
 								</div>
-								<div className="font-semibold text-sm text-blue-600 lg:text-base">
-									<span className="text-xs text-neutral-500 lg:pr-1.5 lg:text-sm">
-										Experience Level:{' '}
+								<div>
+									<span className="text-xs text-neutral-500 lg:text-sm">
+										XP Level:{' '}
 									</span>
 									{xpLevelValue}
 								</div>
-								<div className="font-semibold text-sm text-blue-600 lg:text-base">
-									<span className="text-xs text-neutral-500 lg:pr-1.5 lg:text-sm">
-										Years of Experience:{' '}
+								<div>
+									<span className="text-xs text-neutral-500 lg:text-sm">
+										XP:{' '}
 									</span>
-									{xpCount}
+									{xpCount}{' '}
+									<span className="text-xs text-neutral-500 lg:text-sm">
+										Years
+									</span>
 								</div>
-								<div className="font-semibold text-sm text-blue-600 lg:text-base">
+								<div>
 									<span className="text-xs text-neutral-500 lg:pr-1.5 lg:text-sm">
 										Job Type:{' '}
 									</span>
 									{jobTypeValue}
 								</div>
-								<div className="font-semibold text-sm text-blue-600 lg:text-base">
+								<div>
 									<span className="text-xs text-neutral-500 lg:pr-1.5 lg:text-sm">
 										Visa Sponsorship:{' '}
 									</span>
 									{visaValue}
 								</div>
 							</div>
+						</div>
+						<hr />
+						<div className="flex flex-row items-center justify-between gap-4">
+							<a href="#">
+								<button className="w-[250px] rounded-full transition hover:opacity-80 disabled:opacity-70 disabled:cursor-not-allowed py-3 font-semibold text-md border-2 text-white border-blue-600 bg-blue-600 lg:w-[300px]">
+									Apply
+								</button>
+							</a>
+							<HeartButton currentUser={currentUser} listingId={id} />
 						</div>
 					</div>
 				</div>
