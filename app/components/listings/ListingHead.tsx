@@ -123,11 +123,12 @@ const ListingHead: FC<ListingHeadProps> = ({
 						</div>
 						<hr />
 						<div className="flex flex-row items-center justify-between gap-4">
-							<a href={jobApply} target="_blank">
-								<button className="w-[250px] rounded-full transition hover:opacity-80 disabled:opacity-70 disabled:cursor-not-allowed py-3 font-semibold text-md border-2 text-white border-blue-600 bg-blue-600 lg:w-[300px]">
-									Apply
-								</button>
-							</a>
+							<button
+								className="w-[250px] rounded-full transition hover:opacity-80 disabled:opacity-70 disabled:cursor-not-allowed py-3 font-semibold text-md border-2 text-white border-blue-600 bg-blue-600 lg:w-[300px]"
+								onClick={() => window.open(jobApply, '_blank')}
+							>
+								Apply
+							</button>
 							<HeartButton currentUser={currentUser} listingId={id} />
 						</div>
 					</div>
