@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import Image from 'next/image';
 
-import { SafeUser } from '@/app/types';
+import { SafeListing, SafeUser } from '@/app/types';
 
 import useCountries from '@/app/hooks/useCountries';
 
@@ -16,7 +16,7 @@ import HeartButton from '../HeartButton';
 
 interface ListingCardProps {
 	currentUser: SafeUser | null;
-	data: Listing;
+	data: SafeListing;
 	actionId?: string;
 	actionLabel?: string;
 	disabled?: boolean;
