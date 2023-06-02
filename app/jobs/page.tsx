@@ -16,24 +16,9 @@ const JobsPage = async () => {
 		);
 	}
 
-	const listings = await getListings({
-		userId: currentUser.id,
-	});
-
-	if (listings.length === 0) {
-		return (
-			<ClientOnly>
-				<EmptyState
-					title="No jobs found..."
-					subtitle="Looks like you haven't posted any jobs. "
-				/>
-			</ClientOnly>
-		);
-	}
-
 	return (
 		<ClientOnly>
-			<JobsClient currentUser={currentUser} listings={listings} />
+			<div>Jobs</div>
 		</ClientOnly>
 	);
 };
