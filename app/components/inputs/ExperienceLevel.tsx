@@ -8,7 +8,6 @@ import useExperienceLevel from '@/app/hooks/useExperienceLevel';
 
 export type ExperienceLevelValue = {
 	label: string;
-	value: string;
 };
 
 interface ExperienceLevelProps {
@@ -26,6 +25,10 @@ const ExperienceLevel: FC<ExperienceLevelProps> = ({
 }) => {
 	const { getAll } = useExperienceLevel();
 
+	const options = getAll().map((item) => ({
+		label: item.label,
+	}));
+
 	return (
 		<div className="flex flex-col items-start gap-4">
 			<div className="flex flex-col">
@@ -34,7 +37,7 @@ const ExperienceLevel: FC<ExperienceLevelProps> = ({
 			</div>
 			<Select
 				value={value}
-				options={getAll()}
+				options={options}
 				placeholder="Any Level"
 				onChange={(value) => onChange(value as ExperienceLevelValue)}
 				formatOptionLabel={(option: any) => (

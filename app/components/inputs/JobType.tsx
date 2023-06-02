@@ -8,7 +8,6 @@ import useJobType from '@/app/hooks/useJobType';
 
 export type JobTypeValue = {
 	label: string;
-	value: string;
 };
 
 interface JobTypeProps {
@@ -21,6 +20,10 @@ interface JobTypeProps {
 const JobType: FC<JobTypeProps> = ({ title, subtitle, value, onChange }) => {
 	const { getAll } = useJobType();
 
+	const options = getAll().map((item) => ({
+		label: item.label,
+	}));
+
 	return (
 		<div className="flex flex-col items-start gap-4">
 			<div className="flex flex-col">
@@ -29,7 +32,7 @@ const JobType: FC<JobTypeProps> = ({ title, subtitle, value, onChange }) => {
 			</div>
 			<Select
 				value={value}
-				options={getAll()}
+				options={options}
 				placeholder="Any Type"
 				onChange={(value) => onChange(value as JobTypeValue)}
 				formatOptionLabel={(option: any) => (

@@ -8,7 +8,6 @@ import useVisaSelect from '@/app/hooks/useVisaSelect';
 
 export type VisaSelectValue = {
 	label: string;
-	value: string;
 };
 
 interface VisaSelectProps {
@@ -26,6 +25,10 @@ const VisaSelect: FC<VisaSelectProps> = ({
 }) => {
 	const { getAll } = useVisaSelect();
 
+	const options = getAll().map((item) => ({
+		label: item.label,
+	}));
+
 	return (
 		<div className="flex flex-col items-start gap-4">
 			<div className="flex flex-col">
@@ -34,7 +37,7 @@ const VisaSelect: FC<VisaSelectProps> = ({
 			</div>
 			<Select
 				value={value}
-				options={getAll()}
+				options={options}
 				placeholder="Select an answer..."
 				onChange={(value) => onChange(value as VisaSelectValue)}
 				formatOptionLabel={(option: any) => (
