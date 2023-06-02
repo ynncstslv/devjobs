@@ -15,7 +15,7 @@ import Heading from '../components/Heading';
 import ListingCard from '../components/listings/ListingCard';
 
 interface JobsClientProps {
-	currentUser?: SafeUser | null;
+	currentUser: SafeUser | null;
 	listings: SafeListing[];
 }
 

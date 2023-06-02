@@ -37,6 +37,7 @@ const ListingClient: FC<ListingClientProps> = ({ currentUser, listing }) => {
 					jobTypeValue={listing.jobTypeValue}
 					visaValue={listing.visaValue}
 					salary={listing.salary}
+					jobApply={listing.jobApply}
 				/>
 				<div className="grid grid-cols-1 mt-10 md:grid-cols-7 md:gap-10">
 					<ListingInfo user={listing.user} description={listing.description} />

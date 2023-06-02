@@ -20,7 +20,7 @@ interface ListingHeadProps {
 	company: string;
 	employeeCount: number;
 	locationValue: string;
-	category: { icon: IconType; label: string };
+	category: { icon: IconType; label: string } | undefined;
 	xpLevelValue: string;
 	xpCount: number;
 	jobTypeValue: string;

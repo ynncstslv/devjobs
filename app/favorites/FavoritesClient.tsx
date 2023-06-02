@@ -7,7 +7,7 @@ import Heading from '../components/Heading';
 import ListingCard from '../components/listings/ListingCard';
 
 interface FavoritesClientProps {
-	currentUser?: SafeUser | null;
+	currentUser: SafeUser | null;
 	listings: SafeListing[];
 }
 
