@@ -11,6 +11,7 @@ import RegisterModal from './components/modals/RegisterModal';
 import './globals.css';
 
 import { Nunito } from 'next/font/google';
+import SearchModal from './components/modals/SearchModal';
 
 const nunito = Nunito({ subsets: ['latin'] });
 
@@ -35,6 +36,7 @@ export default async function RootLayout({
 					<LoginModal />
 					<RegisterModal />
 					<PostJobModal />
+					<SearchModal />
 					<Navbar currentUser={currentUser} />
 				</ClientOnly>
 				<div className="pb-20 pt-28">{children}</div>
