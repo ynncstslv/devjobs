@@ -20,7 +20,7 @@ export default async function getListings(params: IListingsParams) {
 			query.category = category;
 		}
 
-		if (location) {
+		if (locationValue) {
 			query.locationValue = locationValue;
 		}
 
