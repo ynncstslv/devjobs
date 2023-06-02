@@ -1,6 +1,8 @@
 'use client';
 
 import { FC, useCallback, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
 import { SafeUser } from '@/app/types';
@@ -19,6 +21,8 @@ interface UserMenuProps {
 }
 
 const UserMenu: FC<UserMenuProps> = ({ currentUser }) => {
+	const router = useRouter();
+
 	const loginModal = useLoginModal();
 	const postJobModal = usePostJobModal();
 	const registerModal = useRegisterModal();
@@ -59,8 +63,14 @@ const UserMenu: FC<UserMenuProps> = ({ currentUser }) => {
 					<div className="flex flex-col cursor-pointer">
 						{currentUser ? (
 							<>
-								<MenuItem label="My Favorites" onClick={() => {}} />
-								<MenuItem label="My Jobs" onClick={() => {}} />
+								<MenuItem
+									label="My Favorites"
+									onClick={() => router.push('/favorites')}
+								/>
+								<MenuItem
+									label="My Jobs"
+									onClick={() => router.push('/jobs')}
+								/>
 								<MenuItem label="Post a Job" onClick={postJobModal.onOpen} />
 								<hr />
 								<MenuItem label="Logout" onClick={() => signOut()} />
