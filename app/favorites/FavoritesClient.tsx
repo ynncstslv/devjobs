@@ -18,7 +18,7 @@ const FavoritesClient: FC<FavoritesClientProps> = ({
 	return (
 		<Container>
 			<Heading title="Favorites" subtitle="List of jobs you have favorited!" />
-			<div className="grid grid-cols-1 gap-8 mt-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-2 2xl:grid-cols-5 2xl:gap-8 ">
+			<div className="grid grid-cols-1 gap-8 mt-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-2 2xl:grid-cols-5 2xl:gap-8">
 				{listings.map((listing) => (
 					<ListingCard
 						key={listing.id}
