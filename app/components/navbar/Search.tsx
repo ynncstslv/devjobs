@@ -1,11 +1,28 @@
 'use client';
 
+import { useMemo } from 'react';
+
+import { useSearchParams } from 'next/navigation';
+
+import useCountries from '@/app/hooks/useCountries';
 import useSearchModal from '@/app/hooks/useSearchModal';
 
 import { BiSearch } from 'react-icons/bi';
 
 const Search = () => {
+	const params = useSearchParams();
+
 	const searchModal = useSearchModal();
+
+	const { getByValue } = useCountries();
+
+	const locationValue = params?.get('locationValue');
+
+	const locationLabel = useMemo(() => {
+		if (locationValue) return getByValue(locationValue as string)?.label;
+
+		return 'Anywhere';
+	}, [locationValue, getByValue]);
 
 	return (
 		<div
@@ -13,7 +30,7 @@ const Search = () => {
 			onClick={searchModal.onOpen}
 		>
 			<div className="w-[250px] flex flex-row items-center justify-between">
-				<div className="px-2 font-semibold text-sm">Anywhere</div>
+				<div className="px-2 font-semibold text-sm">{locationLabel}</div>
 				<div className="p-2 text-white rounded-full bg-blue-600">
 					<BiSearch size={14} />
 				</div>
